@@ -15,6 +15,15 @@ describe ConnectFour do
   end
 
   describe '#drop_disk' do
+    context 'when one disk is added to leftmost column' do
+      it 'has a disk in first column' do
+        game.drop_disk(0, :player1)
+
+        grid = game.instance_variable_get(:@grid)
+        expect(grid[0][0]).to eq(:player1)
+      end
+    end
+
     context 'when two disks are added to leftmost column' do
       before do
         game.drop_disk(0, :player1)
