@@ -7,14 +7,8 @@ class ConnectFour
   end
 
   def drop_disk(column, id)
-    unless column.between?(
-      0, @grid.count - 1
-    )
-      raise RangeError,
-            "column #{column} is out of range. Must be between 0 and #{@grid.count - 1}"
-    end
-
-    raise RangeError, "column #{column} already has maximum disks" unless @grid[column].last.nil?
+    valid, msg = valid_column?(column)
+    raise StandardError, msg unless valid
 
     @grid[column].each_index do |i|
       @grid[column][i] = id and break if @grid[column][i].nil?
@@ -22,6 +16,16 @@ class ConnectFour
   end
 
   private
+
+  def valid_column?(column)
+    unless column.between?(0, @grid.count - 1)
+      return false, "column #{column} is out of range. Must be between 0 and #{@grid.count - 1}"
+    end
+
+    return false, "column #{column} already has maximum disks" unless @grid[column].last.nil?
+
+    true
+  end
 
   def make_grid(x, y) # rubocop:disable Naming/MethodParameterName
     grid = []
