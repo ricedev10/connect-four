@@ -13,4 +13,19 @@ describe ConnectFour do
       expect(grid).to be_2d_array_of(7, 6)
     end
   end
+
+  describe '#drop_disk' do
+    context 'when two disks are added to leftmost column' do
+      before do
+        game.drop_disk(0, :player1)
+        game.drop_disk(0, :player1)
+      end
+
+      it 'stacks in the grid array' do
+        grid = game.instance_variable_get(:@grid)
+        expect(grid[0][0]).to eq(:player1)
+        expect(grid[0][1]).to eq(:player1)
+      end
+    end
+  end
 end
