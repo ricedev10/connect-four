@@ -1,25 +1,35 @@
+# frozen-string-literal: false
+
+require 'colorize'
+
 # Command line interface game for playing connect against computer or other player
 class ConnectFour
-  attr_reader :winner
+  attr_reader :winner, :player1, :player2
 
   def initialize(columns = 7, rows = 6)
     @grid = make_grid(columns, rows)
     @winner = nil
+    @player1 = "\u26AA"
+    @player2 = "\u26AB"
+    @next_player = @player1
+
     @columns = columns
     @rows = rows
   end
 
-  def drop_disk(column, id)
+  def drop_disk(column, player = @next_player)
     valid, msg = valid_column?(column)
     raise StandardError, msg unless valid
 
     @grid[column].each_index do |row|
       next unless @grid[column][row].nil?
 
-      @grid[column][row] = id
+      @grid[column][row] = player
       check_winner(column, row)
       break
     end
+
+    @next_player = @next_player == @player1 ? @player2 : @player1
   end
 
   def to_s
@@ -29,9 +39,20 @@ class ConnectFour
         # each row (X | X | X ...)
         # start from top most row when adding to string
 
-        out << "#{@grid[column][@rows - row - 1] || '___'} | "
+        out << " #{@grid[column][@rows - row - 1] || '  '} |"
       end
       out << "\n"
+    end
+
+    # Bottom line
+    @columns.times do |i|
+      out << '-----'
+    end
+
+    # Numbering for each column
+    out << "\n"
+    @columns.times do |i|
+      out << "  #{i + 1} |"
     end
 
     out
