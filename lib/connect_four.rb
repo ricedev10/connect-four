@@ -38,44 +38,42 @@ class ConnectFour
       @columns.times do |column|
         # each row (X | X | X ...)
         # start from top most row when adding to string
-
         out << " #{@grid[column][@rows - row - 1] || '  '} |"
       end
       out << "\n"
     end
 
     # Bottom line
-    @columns.times do |i|
-      out << '-----'
-    end
+    @columns.times { out << '-----' }
 
     # Numbering for each column
     out << "\n"
-    @columns.times do |i|
-      out << "  #{i + 1} |"
-    end
+    @columns.times { |i| out << "  #{i + 1} |" }
 
     out
   end
 
   private
 
-  def each_row_at(index = 0)
+  def rows_at(index = 0)
+    row = []
     @grid.each do |column|
-      yield(column[index])
+      row << column[index]
     end
+
+    row
   end
 
-  def find_winner_at(iterator)
+  def find_winner_at(values)
     last = nil
     count = 1
 
-    iterator.call(proc do |e|
+    values.each do |e|
       last == e && !e.nil? ? count += 1 : count = 1
       last = e
 
       @winner = last and return true if count == 4
-    end)
+    end
 
     false
   end
@@ -83,14 +81,10 @@ class ConnectFour
   def check_winner(last_column, last_row)
     # check column
     column = @grid[last_column]
-    return if find_winner_at(lambda { |b|
-      column.each(&b)
-    })
+    return if find_winner_at(column)
 
     # check row
-    return if find_winner_at(lambda { |b|
-      each_row_at(last_row, &b)
-    })
+    return if find_winner_at(rows_at(last_row))
 
     # check diagonal
     left_most = last_column
@@ -98,14 +92,15 @@ class ConnectFour
 
     left_most -= 1 and bottom_most -= 1 while left_most.positive? && bottom_most.positive?
 
-    find_winner_at(proc { |b|
-      diagonal = @grid[left_most][bottom_most]
-      while left_most <= @columns && bottom_most <= @rows
-        b.call(diagonal)
-        left_most += 1
-        bottom_most += 1
-      end
-    })
+    diagonal = []
+    while left_most < @columns && bottom_most < @rows
+      slot = @grid[left_most][bottom_most]
+      diagonal << slot
+      left_most += 1
+      bottom_most += 1
+    end
+
+    find_winner_at(diagonal)
   end
 
   def valid_column?(column)
