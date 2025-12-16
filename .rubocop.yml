@@ -11,3 +11,7 @@
 AllCops:
   Exclude:
     - Gemfile
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/*"
