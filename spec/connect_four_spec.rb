@@ -118,5 +118,45 @@ describe ConnectFour do
         expect(game.winner).to eq(:player1)
       end
     end
+
+    context 'when dropping one disk' do
+      it 'has no winner' do
+        game.drop_disk(0)
+        expect(game.winner).to be_nil
+      end
+    end
+  end
+
+  describe '#play' do
+    context 'when players play in separate column' do
+      let(:player1) { double }
+      let(:player2) { double }
+
+      before do
+        allow(player1).to receive(:get).and_return(1).exactly(4).times
+        allow(player2).to receive(:get).and_return(2).exactly(3).times
+        allow(game).to receive(:puts)
+      end
+
+      it 'has player1 as winner' do
+        game.play(player1, player2)
+        expect(game.winner).to eq(game.player1)
+      end
+    end
+
+    context 'when player1 plays on bottom row' do
+      let(:player1) { double }
+      let(:player2) { double }
+
+      before do
+        allow(player1).to receive(:get).and_return(0, 1, 2, 3)
+        allow(player2).to receive(:get).and_return(0, 1, 2)
+        allow(game).to receive(:puts)
+      end
+      it 'has player1 as winner' do
+        game.play(player1, player2)
+        expect(game.winner).to eq(game.player1)
+      end
+    end
   end
 end

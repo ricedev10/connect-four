@@ -32,6 +32,22 @@ class ConnectFour
     @next_player = @next_player == @player1 ? @player2 : @player1
   end
 
+  def play(player1, player2)
+    next_player = player1
+    while @winner.nil?
+      puts self
+      puts "Enter a column (#{@next_player}): "
+      # column = gets.chomp!.to_i - 1
+      column = next_player.get
+      drop_disk(column)
+
+      next_player = next_player == player1 ? player2 : player1
+    end
+
+    puts self
+    puts "#{@winner} has won!"
+  end
+
   def to_s
     out = ''
     @rows.times do |row|
