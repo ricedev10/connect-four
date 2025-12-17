@@ -37,7 +37,6 @@ class ConnectFour
     while @winner.nil?
       puts self
       puts "Enter a column (#{@next_player}): "
-      # column = gets.chomp!.to_i - 1
       column = next_player.get
       drop_disk(column)
 
