@@ -116,6 +116,22 @@ class ConnectFour
     end
 
     find_winner_at(diagonal)
+
+    # check diagonal perpendicular
+    right_most = last_column
+    bottom_most = last_row
+
+    right_most += 1 and bottom_most -= 1 while right_most < (@columns - 1) && bottom_most.positive?
+
+    diagonal = []
+    while right_most >= 0 && bottom_most < @rows
+      slot = @grid[right_most][bottom_most]
+      diagonal << slot
+      right_most -= 1
+      bottom_most += 1
+    end
+
+    find_winner_at(diagonal)
   end
 
   def valid_column?(column)

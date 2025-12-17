@@ -121,6 +121,25 @@ describe ConnectFour do
 
     context 'when dropping disks diagonally from bottom right to top left' do
       before do
+        game.drop_disk(3, :player1)
+
+        game.drop_disk(2, :player2)
+        game.drop_disk(2, :player1)
+
+        2.times { game.drop_disk(1, :player2) }
+        game.drop_disk(1, :player1)
+
+        3.times { game.drop_disk(0, :player2) }
+        game.drop_disk(0, :player1)
+      end
+
+      it 'has player1 as winner' do
+        expect(game.winner).to eq(:player1)
+      end
+    end
+
+    context 'when dropping disks diagonally from bottom right to top left' do
+      before do
         game.drop_disk(4, :player1)
 
         game.drop_disk(3, :player2)
