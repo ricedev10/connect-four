@@ -2,8 +2,9 @@
 
 # Player class for connect four game. Receives user input
 class Player
-  def initialize(range)
+  def initialize(range, &modifier)
     @range = range
+    @modifier = modifier
   end
 
   def get # rubocop:disable Metrics/MethodLength
@@ -18,7 +19,7 @@ class Player
         next
       end
 
-      return num.to_i
+      return @modifier ? @modifier.call(num.to_i) : num.to_i
     end
   end
 

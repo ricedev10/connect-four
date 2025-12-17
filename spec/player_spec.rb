@@ -2,6 +2,20 @@ require_relative '../lib/player'
 
 describe Player do
   subject(:player) { described_class.new(0..5) }
+
+  describe '#initialize' do
+    subject(:player) { described_class.new(0..5) { |value| value * 2 } }
+    context 'when block is provided' do
+      before do
+        allow(player).to receive(:gets).and_return('2')
+      end
+
+      it 'returns 4 when getting 2' do
+        expect(player.get).to eql(4)
+      end
+    end
+  end
+
   describe '#get' do
     context 'when input is valid' do
       before do
