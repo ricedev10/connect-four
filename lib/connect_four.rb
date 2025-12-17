@@ -47,7 +47,7 @@ class ConnectFour
     puts "#{@winner} has won!"
   end
 
-  def to_s
+  def to_s # rubocop:disable Metrics/MethodLength
     out = ''
     @rows.times do |row|
       @columns.times do |column|
